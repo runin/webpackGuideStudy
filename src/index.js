@@ -1,11 +1,15 @@
 import printMe from './print.js'
 import './style.css'
 
+if(process.env.NODE_ENV !== 'production'){
+  console.log('Looks like we are in development mode!');
+}
+
 function component() {
   var element = document.createElement('div');
   var btn = document.createElement('button');
 
-  element.innerText = 'hello shang444';
+  element.innerText = 'hello shang444====';
   btn.onclick = printMe;
 
   element.appendChild(btn);
