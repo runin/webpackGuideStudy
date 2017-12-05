@@ -1,0 +1,24 @@
+cnpm init -y
+
+cnpm install --save-dev webpack
+
+生产环境构建
+cnpm install --save-dev webpack-merge
+
+精简输出
+cnpm install --save-dev uglifyjs-webpack-plugin
+
+webpack-dev-server 为你提供了一个简单的 web 服务器，并且能够实时重新加载
+cnpm install --save-dev webpack-dev-server
+
+清理 /dist 文件夹
+cnpm install --save-dev clean-webpack-plugin
+
+设定 HtmlWebpackPlugin
+cnpm install --save-dev html-webpack-plugin
+
+加载css
+cnpm install --save-dev style-loader css-loader
+
+加载图片
+cnpm install --save-dev file-loader
