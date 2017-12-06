@@ -22,3 +22,12 @@ cnpm install --save-dev style-loader css-loader
 
 加载图片
 cnpm install --save-dev file-loader
+
+Copy Webpack Plugin
+cnpm install --save-dev copy-webpack-plugin
+
+extract-text-webpack-plugin
+npm install --save-dev extract-text-webpack-plugin
+
+url-loader
+cnpm install --save-dev url-loader

@@ -1,6 +1,8 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -13,7 +15,14 @@ module.exports = {
       title: 'Production',
       template: './src/index.html',
       hash: true
-    })
+    }),
+    /*new CopyWebpackPlugin([
+      {
+        from: 'src/images',
+        to: 'images'
+      }
+    ]),*/
+    new ExtractTextPlugin('css/[name].[contenthash].css')
   ],
   output: {
     filename: '[name].[chunkhash].js',
@@ -23,15 +32,21 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        })
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
-          'file-loader'
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'images/'
+            }
+          }
         ]
       }
     ]
