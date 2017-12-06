@@ -16,12 +16,12 @@ module.exports = {
       template: './src/index.html',
       hash: true
     }),
-    /*new CopyWebpackPlugin([
+    new CopyWebpackPlugin([
       {
         from: 'src/images',
         to: 'images'
       }
-    ]),*/
+    ]),
     new ExtractTextPlugin('css/[name].[contenthash].css')
   ],
   output: {
@@ -37,7 +37,7 @@ module.exports = {
           use: 'css-loader'
         })
       },
-      {
+      /*{
         test: /\.(png|svg|jpg|gif)$/,
         use: [
           {
@@ -46,6 +46,14 @@ module.exports = {
               name: '[name].[ext]',
               outputPath: 'images/'
             }
+          }
+        ]
+      }*/
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          {
+            loader: 'url-loader?limit=30000&name=images/[name].[ext]',
           }
         ]
       }
