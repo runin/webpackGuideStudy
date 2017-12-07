@@ -1,12 +1,15 @@
 const path = require('path');
+const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BundleAnalyzerPlugin = reuire('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
-    app: './src/js/index.js'
+    app: './src/js/index.js',
+    util: ['./src/js/index.js']
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
@@ -22,10 +25,14 @@ module.exports = {
         to: 'images'
       }
     ]),
-    new ExtractTextPlugin('css/[name].[contenthash].css')
+    new ExtractTextPlugin('css/[name].[contenthash:6].css'),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'util'
+    }),
+    new BundleAnalyzerPlugin()
   ],
   output: {
-    filename: '[name].[chunkhash].js',
+    filename: '[name].[chunkhash:6].js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {

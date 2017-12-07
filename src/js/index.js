@@ -1,5 +1,6 @@
 import '../css/style.css';
 import Icon from '../images/logo.jpg';
+import console from './util.js'
 function test() {
   var dom = document.createElement('div');
   dom.innerHTML = 'hello';
@@ -14,3 +15,4 @@ function test() {
   return dom;
 }
 document.body.appendChild(test());
+console('hhhhhhhhhhhhhhhh');
