@@ -4,7 +4,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const BundleAnalyzerPlugin = reuire('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
@@ -28,8 +27,7 @@ module.exports = {
     new ExtractTextPlugin('css/[name].[contenthash:6].css'),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'util'
-    }),
-    new BundleAnalyzerPlugin()
+    })
   ],
   output: {
     filename: '[name].[chunkhash:6].js',
