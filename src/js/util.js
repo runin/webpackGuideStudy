@@ -1,4 +1,4 @@
 function console(str) {
-  alert(str);
+  return str
 }
 module.exports = console;

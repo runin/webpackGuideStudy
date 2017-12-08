@@ -2,8 +2,12 @@ import '../css/style.css';
 import Icon from '../images/logo.jpg';
 import console from './util.js'
 function test() {
+  let a = 1;
+  let b = 2;
+  var xxx = (c,d) => c*d;
+
   var dom = document.createElement('div');
-  dom.innerHTML = 'hello';
+  dom.innerHTML = 'hello==='+ xxx(a,b) + '&util='+ console('hhhhhhhhhhh');
   dom.classList.add('hello') ;
 
   var myIcon = new Image();
@@ -15,4 +19,4 @@ function test() {
   return dom;
 }
 document.body.appendChild(test());
-console('hhhhhhhhhhhhhhhh');
+
