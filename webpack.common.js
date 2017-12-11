@@ -15,7 +15,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: __dirname + '/src/index.html',
       filename: 'index.html',
       hash: true,
       favicon: './src/images/logo.jpg',
@@ -25,7 +25,7 @@ module.exports = {
       excludeChunks: ['list', 'detail']
     }),
     new HtmlWebpackPlugin({
-      template: './src/detail.html',
+      template: __dirname + '/src/detail.html',
       filename: 'detail.html',
       hash: true,
       favicon: './src/images/logo.jpg',
@@ -35,7 +35,7 @@ module.exports = {
       excludeChunks: ['index', 'list'],
     }),
     new HtmlWebpackPlugin({
-      template: './src/list.html',
+      template: __dirname + '/src/list.html',
       filename: 'list.html',
       hash: true,
       favicon: './src/images/logo.jpg',
