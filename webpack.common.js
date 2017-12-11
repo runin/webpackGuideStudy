@@ -56,7 +56,7 @@ module.exports = {
     })
   ],
   output: {
-    filename: '[name].[chunkhash:6].js',
+    filename: 'js/[name].[chunkhash:6].js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
@@ -72,7 +72,7 @@ module.exports = {
               localIdentName: '[path][name]__[local]--[hash:base64:5]'
             }
           },
-          publicPath: "../" //生成的独立CSS文件中的url图片地址的publicPath,通常JS中的publicPath不一样,如果一样可以不设置
+          publicPath: '../' //生成的独立CSS文件中的url图片地址的publicPath,通常JS中的publicPath不一样,如果一样可以不设置
         })
       },
       /*{
@@ -134,5 +134,8 @@ module.exports = {
         }
       }
     ]
+  },
+  externals: {
+    jquery: 'jQuery'
   }
 };
