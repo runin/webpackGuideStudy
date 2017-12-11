@@ -7,16 +7,42 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
-    app: './src/js/index.js',
-    util: ['./src/js/util.js']
+    index: path.resolve(__dirname, 'src/js/index.js'),
+    detail: path.resolve(__dirname, 'src/js/detail.js'),
+    list: path.resolve(__dirname, 'src/js/list.js'),
+    util: path.resolve(__dirname, 'src/js/util.js')
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      favicon: './src/images/logo.jpg',
-      title: 'Production',
       template: './src/index.html',
-      hash: true
+      filename: 'index.html',
+      hash: true,
+      favicon: './src/images/logo.jpg',
+      title: 'index',
+      showErrors: true,
+      inject: 'body',
+      excludeChunks: ['list', 'detail']
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/detail.html',
+      filename: 'detail.html',
+      hash: true,
+      favicon: './src/images/logo.jpg',
+      title: 'detail',
+      showErrors: true,
+      inject: 'body',
+      excludeChunks: ['index', 'list'],
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/list.html',
+      filename: 'list.html',
+      hash: true,
+      favicon: './src/images/logo.jpg',
+      title: 'list',
+      showErrors: true,
+      inject: 'body',
+      excludeChunks: ['index', 'detail'],
     }),
     new CopyWebpackPlugin([
       {
@@ -31,7 +57,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].[chunkhash:6].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
   },
   module: {
     rules: [

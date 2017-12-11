@@ -1,4 +1,4 @@
-function console(str) {
+function until(str) {
   return str
 }
-module.exports = console;
+module.exports = until;
