@@ -1,4 +1,4 @@
-import '../css/style.css';
+import styles from '../css/style.css';
 import Icon from '../images/logo.jpg';
 import console from './util.js'
 function test() {
@@ -8,7 +8,7 @@ function test() {
 
   var dom = document.createElement('div');
   dom.innerHTML = 'hello==='+ xxx(a,b) + '&util='+ console('hhhhhhhhhhh');
-  dom.classList.add('hello') ;
+  dom.classList.add(styles.hello) ;
 
   var myIcon = new Image();
   myIcon.src = Icon;
