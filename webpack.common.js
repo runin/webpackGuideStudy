@@ -62,16 +62,29 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.(scss|sass|css)$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: {
-            loader:'css-loader',
-            options: {
-              modules: true, //设置css局部作用域
-              localIdentName: '[path][name]__[local]--[hash:base64:5]'
+          use: [
+            {
+              loader:'css-loader',
+              options: {
+                modules: true, //设置css局部作用域
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                config: {
+                  path: './postcss.config.js'
+                }
+              }
+            },
+            {
+              loader: 'sass-loader'
             }
-          },
+          ],
           publicPath: '../' //生成的独立CSS文件中的url图片地址的publicPath,通常JS中的publicPath不一样,如果一样可以不设置
         })
       },
@@ -136,6 +149,6 @@ module.exports = {
     ]
   },
   externals: {
-    jquery: 'jQuery'
+    // jquery: 'jQuery'
   }
 };
