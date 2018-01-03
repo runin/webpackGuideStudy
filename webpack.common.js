@@ -127,11 +127,11 @@ module.exports = {
               mozjpeg: {
                 progressive: true,
                 quality: 65
-              },
+              }/*,ios bug
               // Specifying webp here will create a WEBP version of your JPG/PNG images
               webp: {
                 quality: 75
-              }
+              }*/
             }
           }
         ]
