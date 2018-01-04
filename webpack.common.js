@@ -1,3 +1,4 @@
+var glob = require('glob');
 const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -5,45 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
-  entry: {
-    index: path.resolve(__dirname, 'src/js/index.js'),
-    detail: path.resolve(__dirname, 'src/js/detail.js'),
-    list: path.resolve(__dirname, 'src/js/list.js'),
-    util: path.resolve(__dirname, 'src/js/util.js')
-  },
+let entries = getEntry('src/js/**/*.js', 'src/js/');
+let chunks = Object.keys(entries);
+let config = {
+  entry: entries,
   plugins: [
     new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin({
-      template: __dirname + '/src/index.html',
-      filename: 'index.html',
-      hash: true,
-      favicon: './src/images/logo.jpg',
-      title: 'index',
-      showErrors: true,
-      inject: 'body',
-      excludeChunks: ['list', 'detail']
-    }),
-    new HtmlWebpackPlugin({
-      template: __dirname + '/src/detail.html',
-      filename: 'detail.html',
-      hash: true,
-      favicon: './src/images/logo.jpg',
-      title: 'detail',
-      showErrors: true,
-      inject: 'body',
-      excludeChunks: ['index', 'list'],
-    }),
-    new HtmlWebpackPlugin({
-      template: __dirname + '/src/list.html',
-      filename: 'list.html',
-      hash: true,
-      favicon: './src/images/logo.jpg',
-      title: 'list',
-      showErrors: true,
-      inject: 'body',
-      excludeChunks: ['index', 'detail'],
-    }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, './static'),
@@ -52,12 +20,14 @@ module.exports = {
     ]),
     new ExtractTextPlugin('css/[name].[contenthash:6].css'),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'util'
+      name: 'vendors', // 将公共模块提取，生成名为`vendors`的chunk
+      chunks: chunks,
+      minChunks: chunks.length // 提取所有entry共同依赖的模块
     })
   ],
   output: {
     filename: 'js/[name].[chunkhash:6].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist')
   },
   module: {
     rules: [
@@ -152,3 +122,64 @@ module.exports = {
     // jquery: 'jQuery'
   }
 };
+
+var pages = Object.keys(getEntry('src/**/*.html', 'src/'))
+pages.forEach(function (pathname) {
+  var conf = {
+    filename: pathname + '.html', // 生成的html存放路径，相对于path
+    template: __dirname + '/src/' + pathname + '.html', // html模板路径
+    inject: 'body' // js插入的位置，true/'head'/'body'/false
+    /*
+     * 压缩这块，调用了html-minify，会导致压缩时候的很多html语法检查问题，
+     * 如在html标签属性上使用{{...}}表达式，很多情况下并不需要在此配置压缩项，
+     * 另外，UglifyJsPlugin会在压缩代码的时候连同html一起压缩。
+     * 为避免压缩html，需要在html-loader上配置'html?-minimize'，见loaders中html-loader的配置。
+     */
+    // minify: { //压缩HTML文件
+    //  removeComments: true, //移除HTML中的注释
+    //  collapseWhitespace: false //删除空白符与换行符
+    // }
+  }
+  if (pathname in config.entry) {
+    conf.favicon = path.resolve(__dirname, './src/images/logo.jpg');
+    conf.inject = 'body';
+    conf.chunks = ['vendors', pathname];
+    conf.hash = true;
+    conf.showErrors = true;
+  }
+  config.plugins.push(new HtmlWebpackPlugin(conf))
+})
+
+module.exports = config;
+
+function getEntry(globPath, pathDir) {
+    //get from github code 
+    var files = glob.sync(globPath);
+    var entries = {},
+        entry,        //文件
+        dirname,    //
+        basename,    //文件名
+        pathname,    //
+        extname;    //文件扩展名
+
+    for (var i = 0; i < files.length; i++) {
+        entry = files[i];
+        dirname = path.dirname(entry);    //返回路径中代表文件夹的部分
+        //console.log("dirname返回路径中代表文件夹的部分:==>"+dirname);
+        extname = path.extname(entry);    //返回路径中文件的后缀名，即路径中最后一个'.'之后的部分。如果一个路径中并不包含'.'或该路径只包含一个'.' 且这个'.'为路径的第一个字符，则此命令返回空字符串。
+        //console.log("extname返回路径中文件的后缀名:==>"+extname);
+        basename = path.basename(entry, extname);    //返回路径中的最后一部分
+        //console.log("basename返回路径中的最后一部分:==>"+basename);
+        pathname = path.normalize(path.join(dirname,  basename));    //规范化路径
+        //console.log("pathname规范化路径:==>"+pathname);
+        pathDir = path.normalize(pathDir);    //规范化路径
+        //console.log("pathDir规范化路径:==>"+pathDir);
+        if(pathname.startsWith(pathDir)){
+            pathname = pathname.substring(pathDir.length);
+            //console.log("pathname判断后:==>"+pathname);   
+        };
+        entries[pathname] = './' + entry;
+    }
+    console.log(entries);
+    return entries;
+}
